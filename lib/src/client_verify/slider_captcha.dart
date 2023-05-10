@@ -85,75 +85,81 @@ class _SliderCaptchaState extends State<SliderCaptcha>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(widget.borderImager),
-              child: SliderCaptCha(
-                widget.image,
-                _offsetMove,
-                answerY,
-                colorCaptChar: widget.colorCaptChar,
-                sliderController: _controller,
+          _getCaptchaImage(),
+          SizedBox(height: widget.imageToBarPadding),
+          _getSliderBar(context)
+        ],
+      ),
+    );
+  }
+
+  Flexible _getCaptchaImage() {
+    return Flexible(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(widget.borderImager),
+        child: SliderCaptCha(
+          widget.image,
+          _offsetMove,
+          answerY,
+          colorCaptChar: widget.colorCaptChar,
+          sliderController: _controller,
+        ),
+      ),
+    );
+  }
+
+  Container _getSliderBar(BuildContext context) {
+    return Container(
+      height: heightSliderBar,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: widget.colorBar,
+        boxShadow: const <BoxShadow>[
+          BoxShadow(
+            offset: Offset(0, 0),
+            blurRadius: 2,
+            color: Colors.grey,
+          )
+        ],
+      ),
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Text(
+              widget.title,
+              style: widget.titleStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Positioned(
+            left: _offsetMove,
+            top: 0,
+            height: 50,
+            width: 50,
+            child: GestureDetector(
+              onHorizontalDragStart: (detail) => _onDragStart(context, detail),
+              onHorizontalDragUpdate: (DragUpdateDetails detail) {
+                _onDragUpdate(context, detail);
+              },
+              onHorizontalDragEnd: (DragEndDetails detail) {
+                checkAnswer();
+              },
+              child: Container(
+                height: heightSliderBar,
+                width: heightSliderBar,
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                  boxShadow: const <BoxShadow>[
+                    BoxShadow(color: Colors.grey, blurRadius: 4)
+                  ],
+                ),
+                child: widget.icon ?? const Icon(Icons.arrow_forward_rounded),
               ),
             ),
           ),
-          SizedBox(height: widget.imageToBarPadding),
-          Container(
-            height: heightSliderBar,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: widget.colorBar,
-              boxShadow: const <BoxShadow>[
-                BoxShadow(
-                  offset: Offset(0, 0),
-                  blurRadius: 2,
-                  color: Colors.grey,
-                )
-              ],
-            ),
-            child: Stack(
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    widget.title,
-                    style: widget.titleStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Positioned(
-                  left: _offsetMove,
-                  top: 0,
-                  height: 50,
-                  width: 50,
-                  child: GestureDetector(
-                    onHorizontalDragStart: (detail) =>
-                        _onDragStart(context, detail),
-                    onHorizontalDragUpdate: (DragUpdateDetails detail) {
-                      _onDragUpdate(context, detail);
-                    },
-                    onHorizontalDragEnd: (DragEndDetails detail) {
-                      checkAnswer();
-                    },
-                    child: Container(
-                      height: heightSliderBar,
-                      width: heightSliderBar,
-                      margin: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.white,
-                        boxShadow: const <BoxShadow>[
-                          BoxShadow(color: Colors.grey, blurRadius: 4)
-                        ],
-                      ),
-                      child: widget.icon ??
-                          const Icon(Icons.arrow_forward_rounded),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );
