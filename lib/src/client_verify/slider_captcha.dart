@@ -249,16 +249,21 @@ class _SliderCaptchaState extends State<SliderCaptcha>
     });
   }
 
-  Future<void> checkAnswer() async {
-    if (isLock) return;
+  Future<bool> checkAnswer() async {
+    if (isLock) return false;
     isLock = true;
 
     if (_offsetMove < answerX + 10 && _offsetMove > answerX - 10) {
       await widget.onConfirm?.call(true);
+
+      isLock = false;
+      return true;
     } else {
       await widget.onConfirm?.call(false);
+
+      isLock = false;
+      return false;
     }
-    isLock = false;
   }
 
   Offset? create() {
