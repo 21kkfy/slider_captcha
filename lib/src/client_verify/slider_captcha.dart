@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import '../pizzule_path.dart';
 
 class SliderController {
-  late Offset? Function() create;
+  Offset? Function()? create;
 }
 
 class SliderCaptcha extends StatefulWidget {
@@ -238,7 +238,7 @@ class _SliderCaptchaState extends State<SliderCaptcha>
   @override
   void didChangeDependencies() {
     _widgetsBinding()?.addPostFrameCallback((timeStamp) {
-      controller.create.call();
+      controller.create!.call();
     });
     super.didChangeDependencies();
   }
@@ -263,7 +263,7 @@ class _SliderCaptchaState extends State<SliderCaptcha>
 
   Offset? create() {
     animationController.forward().then((value) {
-      Offset? offset = _controller.create.call();
+      Offset? offset = _controller.create!.call();
       answerX = offset?.dx ?? 0;
       answerY = offset?.dy ?? 0;
     });
